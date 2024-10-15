@@ -11,12 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('event_categories', function (Blueprint $table) {
+        Schema::create('registrations', function (Blueprint $table) {
             $table->unsignedInteger("id")->autoIncrement();
-            $table->unsignedInteger('category_id');
+            $table->date("input_type");
+            $table->string("calculated_value");
+            $table->string("purchase_date");
+            $table->string("promotional code");
+            $table->unsignedSmallInteger('user_id');
+            $table->unsignedInteger('assitant_id');
             $table->unsignedInteger('event_id');
             $table->timestamps();
-            $table->foreign('category_id')->references('id')->on('categories');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('assitant_id')->references('id')->on('assistants');
             $table->foreign('event_id')->references('id')->on('events');
         });
     }
@@ -26,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('event_categories');
+        Schema::dropIfExists('registrations');
     }
 };

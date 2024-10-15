@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('event_categories', function (Blueprint $table) {
+        Schema::create('waiting_list', function (Blueprint $table) {
             $table->unsignedInteger("id")->autoIncrement();
-            $table->unsignedInteger('category_id');
+            $table->date("registration_date");
+            $table->unsignedInteger('assitant_id');
             $table->unsignedInteger('event_id');
             $table->timestamps();
-            $table->foreign('category_id')->references('id')->on('categories');
+            $table->foreign('assitant_id')->references('id')->on('assistants');
             $table->foreign('event_id')->references('id')->on('events');
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('event_categories');
+        Schema::dropIfExists('waiting_list');
     }
 };

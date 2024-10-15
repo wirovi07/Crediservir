@@ -6,22 +6,15 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('events', function (Blueprint $table) {
+        Schema::create('assistants', function (Blueprint $table) {
             $table->unsignedInteger("id")->autoIncrement();
-            $table->string('title');
-            $table->string('description');
-            $table->string('hour');
-            $table->string('place');
-            $table->string('availabl_space');
-            $table->string('type');
-            $table->string('base_value');
-            $table->date('opening_date');
-            $table->date('closing_date');
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->date('birthdate');
+            $table->string('email');
+            $table->string('phone');
             $table->unsignedSmallInteger('user_id');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
@@ -33,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('events');
+        Schema::dropIfExists('assistants');
     }
 };
