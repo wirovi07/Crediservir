@@ -13,14 +13,14 @@ class AuthController extends Controller
     {
         $request->validate([
             'type_document' => 'required|string',
-            'document' => 'required|string',
+            'document' => 'required|numeric',
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'sex' => 'required|string',
             'phone' => 'required|numeric',
-            'email' => 'required|email|string', 
+            'email' => 'required|email|string',
             'address' => 'required|string',
-            'password' => 'required',
+            'password' => 'required|confirmed',
         ]);
     
         try {
@@ -37,13 +37,13 @@ class AuthController extends Controller
             $user->save();
     
             // Generar el token JWT para el usuario
-            $token = JWTAuth::fromUser($user);
+            // $token = JWTAuth::fromUser($user);
     
             // Devolver el token y los datos del usuario
             return response()->json([
                 'message' => 'User created successfully',
                 'user' => $user,
-                'token' => $token
+                // 'token' => $token
             ], 201);
     
         } catch (\Throwable $th) {
