@@ -36,11 +36,21 @@ class AuthController extends Controller
             $user->password = Hash::make($request->password); 
             $user->save();
     
-            return response()->json(['message' => 'User created successfully']);
+            // Generar el token JWT para el usuario
+            $token = JWTAuth::fromUser($user);
+    
+            // Devolver el token y los datos del usuario
+            return response()->json([
+                'message' => 'User created successfully',
+                'user' => $user,
+                'token' => $token
+            ], 201);
+    
         } catch (\Throwable $th) {
             return response()->json(['message' => $th->getMessage()], 422);
         }
     }
+    
     
     public function login(Request $request)
     {
