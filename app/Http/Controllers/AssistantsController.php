@@ -15,9 +15,18 @@ class AssistantsController extends Controller
 
     public function index()
     {
-        $assistant = Assistants::all();
-
-        return response()->json(['message' => 'List of assistants', 'data' => $assistant]);
+        $assistantsList = DB::table("assistants as ass")
+            ->join("users as us", "ass.user_id", "=", "us.id")
+            ->select(
+                "ass.id",
+                "ass.birthdate",
+                "ass.email",
+                "ass.phone",
+                DB::raw("CONCAT(ass.first_name, ' ', ass.last_name) as assistants")
+            )
+            ->get();
+    
+        return $assistantsList;
     }
 
     public function show(string $id){
