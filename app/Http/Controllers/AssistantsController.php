@@ -83,6 +83,7 @@ class AssistantsController extends Controller
             $assistant->birthdate = $request->birthdate;
             $assistant->email = $request->email;
             $assistant->phone = $request->phone;
+            $assistant->save();
 
             return response()->json(['message' => 'Assistant updated successfully']);
         } catch (QueryException $e) {
