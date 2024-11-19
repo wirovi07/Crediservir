@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AssistantsController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\EventController;
 
 Route::group(['middleware' => 'auth:api'], function () {
 
@@ -20,6 +21,13 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('category', [CategoryController::class, 'store']);
     Route::put('category/{id}', [CategoryController::class, 'update']);
     Route::delete('category/{id}', [CategoryController::class, 'destroy']);
+
+    //CATEGORY
+    Route::get('event', [EventController::class, 'index']);
+    Route::get('event/{id}', [EventController::class, 'show']);
+    Route::post('event', [EventController::class, 'store']);
+    Route::put('event/{id}', [EventController::class, 'update']);
+    Route::delete('event/{id}', [EventController::class, 'destroy']);
 
 });
 
