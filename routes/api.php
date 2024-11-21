@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AssistantsController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\EventCategoyController;
 
 Route::group(['middleware' => 'auth:api'], function () {
 
@@ -22,12 +23,20 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::put('category/{id}', [CategoryController::class, 'update']);
     Route::delete('category/{id}', [CategoryController::class, 'destroy']);
 
-    //CATEGORY
+    //EVENT
     Route::get('event', [EventController::class, 'index']);
     Route::get('event/{id}', [EventController::class, 'show']);
     Route::post('event', [EventController::class, 'store']);
     Route::put('event/{id}', [EventController::class, 'update']);
     Route::delete('event/{id}', [EventController::class, 'destroy']);
+
+    //EVENT_CATEGORY
+    Route::get('eventcategory', [EventCategoyController::class, 'index']);
+    Route::get('eventnamecategory', [EventCategoyController::class,'categoryName']);
+    Route::get('eventcategory/{id}', [EventCategoyController::class, 'show']);
+    Route::post('eventcategory', [EventCategoyController::class, 'store']);
+    Route::put('eventcategory/{id}', [EventCategoyController::class, 'update']);
+    Route::delete('eventcategory/{id}', [EventCategoyController::class, 'destroy']);
 
 });
 
