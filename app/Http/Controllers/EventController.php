@@ -12,7 +12,9 @@ class EventController extends Controller
     public function index()
     {
         $eventList = DB::table("events as e")
-        ->join("users as u", "e.user_id", "=", "u.id")
+        ->join("event_categories as ec", "e.id", "ec.event_id")
+        ->join("categories as c", "ec.category_id", "c.id")
+        ->join("users as u", "e.user_id", "u.id")
         ->select(
             "e.id",
             "e.title",
@@ -24,6 +26,7 @@ class EventController extends Controller
             "e.base_value",
             "e.opening_date",
             "e.closing_date",
+            "c.name as category_name",
         )->get();
 
         return response()->json($eventList);

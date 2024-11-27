@@ -66,7 +66,7 @@ class EventCategoyController extends Controller
                 "e.base_value",
                 "e.opening_date",
                 "e.closing_date",
-                "c.name"
+                "c.id as category_id",
             )->first();
 
         if ($eventCategory) {

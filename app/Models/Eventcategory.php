@@ -10,7 +10,7 @@ class Eventcategory extends Model
 {
     use HasFactory;
 
-    protected $table = 'eventcategory';
+    protected $table = 'event_categories';
 
     protected $fillable = [
         'event_id',
