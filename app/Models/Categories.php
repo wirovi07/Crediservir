@@ -15,6 +15,10 @@ class Categories extends Model
     protected $fillable = [
         'name',
         'description',
-        'organizer_id'
     ];
+
+    public function events()
+    {
+        return $this->belongsToMany(Event::class, 'event_categories', 'category_id', 'event_id');
+    }
 }

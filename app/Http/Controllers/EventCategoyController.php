@@ -11,24 +11,25 @@ use Illuminate\Support\Facades\DB;
 
 class EventCategoyController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $eventCategoryList = DB::table("event_categories as ec")
-        ->join("events as e", "e.id",  "ec.event_id")
-        ->join("users as u", "e.user_id",  "u.id")
-        ->join("categories as c", "c.id","ec.category_id")
-        ->select(
-            "e.id",
-            "e.title",
-            "e.description",
-            "e.hour",
-            "e.place",
-            "e.availabl_space",
-            "e.type",
-            "e.base_value",
-            "e.opening_date",
-            "e.closing_date",
-            "c.name"
-        )->get();
+            ->join("events as e", "e.id",  "ec.event_id")
+            ->join("users as u", "e.user_id",  "u.id")
+            ->join("categories as c", "c.id", "ec.category_id")
+            ->select(
+                "e.id",
+                "e.title",
+                "e.description",
+                "e.hour",
+                "e.place",
+                "e.availabl_space",
+                "e.type",
+                "e.base_value",
+                "e.opening_date",
+                "e.closing_date",
+                "c.name"
+            )->get();
 
         return response()->json($eventCategoryList);
     }
@@ -36,18 +37,17 @@ class EventCategoyController extends Controller
     public function categoryName()
     {
         $categoryList = DB::table('categories as ca')
-        ->select(
-            "ca.id",
-            "ca.name",
-        )->get();
-    
-        if($categoryList) {
+            ->select(
+                "ca.id",
+                "ca.name",
+            )->get();
+
+        if ($categoryList) {
             return response()->json(['message' => 'Category found', 'data' => $categoryList]);
         } else {
             return response()->json(['message' => 'Event Category not found'], 404);
         }
     }
-    
 
     public function show(string $id)
     {
@@ -88,11 +88,11 @@ class EventCategoyController extends Controller
             'base_value' => 'required',
             'opening_date' => 'required|string',
             'closing_date' => 'required|string',
-            'category_id' => 'required|exists:categories,id', // Asocia a una categoría existente
+            'category_id' => 'required|exists:categories,id',
         ]);
-    
+
         DB::beginTransaction();
-    
+
         try {
             // Crear el evento
             $event = new Event();
@@ -107,13 +107,13 @@ class EventCategoyController extends Controller
             $event->closing_date = $request->closing_date;
             $event->user_id = auth()->user()->id;
             $event->save();
-    
+
             // Crear la relación en Eventcategory con una categoría existente
             $eventCategory = new Eventcategory();
             $eventCategory->event_id = $event->id;
             $eventCategory->category_id = $request->category_id; // Usar el ID de la categoría que llega del frontend
             $eventCategory->save();
-    
+
             DB::commit();
             return response()->json(['message' => 'Event created successfully']);
         } catch (QueryException $e) {
@@ -134,36 +134,32 @@ class EventCategoyController extends Controller
             'base_value' => 'required',
             'opening_date' => 'required|string',
             'closing_date' => 'required|string',
-            'category_id' => 'required|exists:categories,id', // Aseguramos que la categoría exista
+            'category_id' => 'required|exists:categories,id', 
         ]);
-    
+
         DB::beginTransaction();
-    
+
         try {
-            // Encontrar el evento a actualizar
             $event = Event::findOrFail($id);
-    
-            // Actualizar el evento con los nuevos datos
-            $event->title = $request->title;
-            $event->description = $request->description;
-            $event->hour = $request->hour;
-            $event->place = $request->place;
-            $event->availabl_space = $request->availabl_space;
-            $event->type = $request->type;
-            $event->base_value = $request->base_value;
-            $event->opening_date = $request->opening_date;
-            $event->closing_date = $request->closing_date;
-            $event->user_id = auth()->user()->id; // Mantener al mismo usuario
-            $event->save();
-    
-            // Actualizar la relación en Eventcategory con la nueva categoría
-            $eventCategory = $event->categories()->first(); // Asumiendo que la relación es many-to-many
-            $eventCategory->category_id = $request->category_id; // Actualizamos la categoría
-            $eventCategory->save();
-    
+
+            $event->update([
+                'title' => $request->title,
+                'description' => $request->description,
+                'hour' => $request->hour,
+                'place' => $request->place,
+                'availabl_space' => $request->availabl_space,
+                'type' => $request->type,
+                'base_value' => $request->base_value,
+                'opening_date' => $request->opening_date,
+                'closing_date' => $request->closing_date,
+                'user_id' => auth()->user()->id,
+            ]);
+
+            $event->categories()->sync([$request->category_id]);
+
             DB::commit();
             return response()->json(['message' => 'Event updated successfully']);
-        } catch (QueryException $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['message' => 'Error updating event: ' . $e->getMessage()], 500);
         }
@@ -171,28 +167,24 @@ class EventCategoyController extends Controller
 
     public function destroy(string $id)
     {
+        DB::beginTransaction();
+    
         try {
-            // Buscar el evento
             $event = Event::find($id);
             if (!$event) {
                 return response()->json(['message' => 'Event not found'], 404);
             }
     
-            // Obtener las categorías asociadas al evento
-            $categories = Eventcategory::where('event_id', $id)->pluck('category_id');
+            $event->categories()->detach();
     
-            // Eliminar las relaciones en Eventcategory
-            Eventcategory::where('event_id', $id)->delete();
-    
-            // Eliminar las categorías asociadas al evento
-            Categories::whereIn('id', $categories)->delete();
-    
-            // Eliminar el evento
             $event->delete();
     
+            DB::commit();
             return response()->json(['message' => 'Event and related data deleted successfully']);
         } catch (\Exception $e) {
+            DB::rollBack();
             return response()->json(['message' => 'Error deleting event: ' . $e->getMessage()], 500);
         }
     }
+    
 }

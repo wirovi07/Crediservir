@@ -22,6 +22,11 @@ class Event extends Model
         'base_value',
         'opening_date',
         'closing_date',
-        'organizer_id',
+        'user_id',
     ];
+
+    public function categories()
+    {
+        return $this->belongsToMany(Categories::class, 'event_categories', 'event_id', 'category_id');
+    }
 }
