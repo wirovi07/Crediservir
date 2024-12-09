@@ -13,14 +13,13 @@ class Registrations extends Model
     protected $table = 'registrations';
 
     protected $fillable = [
-        'title',
-        'input_type',
+        'type_input',
         'calculated_value',
         'purchase_date',
-        'promotionalCodeApplied',
-        'organizer_id',
-        'event_id',
+        'code_promotional',
+        'user_id',
         'assistant_id',
+        'event_id',
         
     ];
 }

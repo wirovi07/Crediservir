@@ -6,6 +6,7 @@ use App\Http\Controllers\AssistantsController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventCategoyController;
+use App\Http\Controllers\RegistrationsController;
 
 Route::group(['middleware' => 'auth:api'], function () {
 
@@ -37,6 +38,13 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('eventcategory', [EventCategoyController::class, 'store']);
     Route::put('eventcategory/{id}', [EventCategoyController::class, 'update']);
     Route::delete('eventcategory/{id}', [EventCategoyController::class, 'destroy']);
+
+    //REGISTRATION
+    Route::get('registration', [RegistrationsController::class, 'index']);
+    Route::get('registration/{id}', [RegistrationsController::class, 'show']);
+    Route::post('registration', [RegistrationsController::class, 'store']);
+    Route::put('registration/{id}', [RegistrationsController::class, 'update']);
+    Route::delete('registration/{id}', [RegistrationsController::class, 'destroy']);
 
 });
 
