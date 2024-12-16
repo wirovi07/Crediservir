@@ -7,11 +7,13 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventCategoyController;
 use App\Http\Controllers\RegistrationsController;
+use App\Http\Controllers\PromotionalcodesController;
 
 Route::group(['middleware' => 'auth:api'], function () {
 
     //ASSISTANT
     Route::get('assistant', [AssistantsController::class, 'index']);
+    Route::get('assistant', [AssistantsController::class, 'assistant']);
     Route::get('assistant/{id}', [AssistantsController::class, 'show']);
     Route::post('assistant', [AssistantsController::class, 'store']);
     Route::put('assistant/{id}', [AssistantsController::class, 'update']);
@@ -26,6 +28,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     //EVENT
     Route::get('event', [EventController::class, 'index']);
+    Route::get('event', [EventController::class, 'event']);
     Route::get('event/{id}', [EventController::class, 'show']);
     Route::post('event', [EventController::class, 'store']);
     Route::put('event/{id}', [EventController::class, 'update']);
@@ -46,6 +49,12 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::put('registration/{id}', [RegistrationsController::class, 'update']);
     Route::delete('registration/{id}', [RegistrationsController::class, 'destroy']);
 
+    //PROMOTIONAL CODE
+    Route::get('promotionalCodes', [PromotionalcodesController::class, 'index']);
+    Route::get('promotionalCodes/{id}', [PromotionalcodesController::class, 'show']);
+    Route::post('promotionalCodes', [PromotionalcodesController::class, 'store']);
+    Route::put('promotionalCodes/{id}', [PromotionalcodesController::class, 'update']);
+    Route::delete('promotionalCodes/{id}', [PromotionalcodesController::class, 'destroy']);
 });
 
 Route::post('register', [AuthController::class, 'register']);

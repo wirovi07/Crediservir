@@ -21,8 +21,8 @@ class RegistrationsController extends Controller
             "r.calculated_value",
             "r.purchase_date",
             "r.code_promotional",
-            "r.assitant_id",
-            "r.event_id",
+            DB::raw("CONCAT(as.first_name, ' ', as.last_name) as assitant_id"),
+            "e.title as event_id",
             "r.user_id"
         )->get();
 

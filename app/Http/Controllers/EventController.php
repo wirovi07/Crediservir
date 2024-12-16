@@ -32,6 +32,17 @@ class EventController extends Controller
         return response()->json($eventList);
     }
 
+    public function event()
+    {
+        $eventList = DB::table("events as e")
+        ->select(
+            "e.id",
+            "e.title",
+        )->get();
+
+        return response()->json($eventList);
+    }
+
     public function show(string $id){
         $event = Event::find($id);
 

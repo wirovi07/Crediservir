@@ -10,11 +10,11 @@ class Promotionalcodes extends Model
 {
     use HasFactory;
 
-    protected $table = 'promotionalcodes';
+    protected $table = 'promotional_codes';
 
     protected $fillable = [
         'code',
-        'discount_percentage',
+        'discount',
         'start_date',
         'end_date',
         'status',

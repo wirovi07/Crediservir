@@ -23,10 +23,20 @@ class AssistantsController extends Controller
                 "ass.email",
                 "ass.phone",
                 DB::raw("CONCAT(ass.first_name, ' ', ass.last_name) as assistants")
-            )
-            ->get();
+            )->get();
     
         return $assistantsList;
+    }
+
+    public function assistant()
+    {
+        $assistant = DB::table("assistants as ass")
+        ->select(
+            "ass.id",
+            DB::raw("CONCAT(ass.first_name, ' ', ass.last_name) as assistants")
+        )->get();
+
+        return $assistant;
     }
 
     public function show(string $id){
