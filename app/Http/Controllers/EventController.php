@@ -38,6 +38,7 @@ class EventController extends Controller
         ->select(
             "e.id",
             "e.title",
+            "e.base_value as calculated_value"
         )->get();
 
         return response()->json($eventList);

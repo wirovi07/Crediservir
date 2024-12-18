@@ -15,9 +15,7 @@ class PromotionalcodesController extends Controller
             ->select(
                 "pc.id",
                 "pc.code",
-            )
-            ->get();
-    
+            )->where('pc.status', '=', 'activo')->get();
         return response()->json($promotionList);
     }
 
